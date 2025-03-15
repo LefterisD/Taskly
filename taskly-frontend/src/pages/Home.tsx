@@ -1,5 +1,14 @@
+import { Box } from '@mui/material';
+import TodoInput from '../components/TodoInput';
+
 const Home = () => {
-  return <h1>Taskly !!!!</h1>;
+  return (
+    <Box
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <TodoInput />
+    </Box>
+  );
 };
 
 export default Home;
