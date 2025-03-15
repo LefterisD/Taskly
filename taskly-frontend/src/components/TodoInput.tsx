@@ -4,6 +4,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 function TodoInput() {
   const theme = useTheme();
@@ -51,18 +52,33 @@ function TodoInput() {
       >
         Show more options
       </Button>
-      {expanded && (
-        <Box>
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={
+          expanded
+            ? { height: 'auto', opacity: 1, marginTop: '1rem' }
+            : { height: 0, opacity: 0 }
+        }
+        exit={{ height: 0, opacity: 0 }}
+        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        style={{ overflow: 'hidden' }} // Prevents abrupt jumps
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           <Box sx={{ display: 'flex', gap: 1 }}>
-            <Typography>Select color:</Typography>
+            <Typography sx={{ minWidth: '9rem' }}>Select color:</Typography>
             <input type="color" value={color} onChange={handleColorChange} />
           </Box>
           <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-            <Typography>Select starting from:</Typography>
+            <Typography sx={{ minWidth: '9rem' }}>
+              Select starting from:
+            </Typography>
             <DatePicker />
           </Box>
         </Box>
-      )}
+      </motion.div>
+      {/* {expanded && (
+        
+      )} */}
     </Box>
   );
 }
