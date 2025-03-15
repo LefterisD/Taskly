@@ -13,15 +13,21 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router';
 
 const drawerWidth = 240;
-const navItems = ['Dashboard', 'About'];
+const navItems = ['Home', 'Dashboard', 'About'];
 
 export default function DrawerAppBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+
+  const handleClick = (to: string) => {
+    navigate(`${to.toLocaleLowerCase()}`);
   };
 
   const drawer = (
@@ -57,15 +63,19 @@ export default function DrawerAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography
-            variant="h6"
+            variant="h4"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: 'none', sm: 'block' }, marginRight: 2 }}
           >
-            MUI
+            Taskly
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
+              <Button
+                key={item}
+                sx={{ color: '#fff' }}
+                onClick={() => handleClick(item)}
+              >
                 {item}
               </Button>
             ))}
