@@ -7,7 +7,7 @@ function About() {
   const title: string = 'Taskly';
 
   const defaultAnimations = {
-    hidden: { opacity: 0, y: 10, color: theme.palette.primary.main },
+    hidden: { opacity: 0, y: 10, color: '#fff' },
     visible: {
       opacity: 1,
       y: 0,
