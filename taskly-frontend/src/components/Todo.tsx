@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   IconButton,
+  lighten,
   TextField,
   Typography,
   useTheme,
@@ -36,12 +37,13 @@ function Todo(props: TodoProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      style={{ maxWidth: '700px' }}
+      style={{ width: '100%', maxWidth: '1330px' }}
     >
       <Card
         sx={{
           display: 'flex',
-          maxWidth: '700px',
+          width: '100%',
+          backgroundColor: lighten(lighten(todo.color, 0.9), 0.6),
           boxShadow: 3,
         }}
       >
@@ -84,7 +86,10 @@ function Todo(props: TodoProps) {
                 </Box>
               </motion.div>
             ) : (
-              <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ flexGrow: 1, color: theme.palette.secondary.main }}
+              >
                 {todo.text}
               </Typography>
             )}
@@ -95,10 +100,14 @@ function Todo(props: TodoProps) {
               <AnimateX key="view-mode">
                 <Box sx={{ margin: '0 auto' }}>
                   <IconButton aria-label="edit" onClick={handleEdit}>
-                    <EditRoundedIcon />
+                    <EditRoundedIcon
+                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
+                    />
                   </IconButton>
                   <IconButton aria-label="delete">
-                    <DeleteRoundedIcon />
+                    <DeleteRoundedIcon
+                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
+                    />
                   </IconButton>
                 </Box>
               </AnimateX>
@@ -108,10 +117,14 @@ function Todo(props: TodoProps) {
               <AnimateX key="edit-mode">
                 <Box sx={{ margin: '0 auto' }}>
                   <IconButton aria-label="discard" onClick={handleEdit}>
-                    <CloseRoundedIcon />
+                    <CloseRoundedIcon
+                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
+                    />
                   </IconButton>
                   <IconButton aria-label="save">
-                    <DoneRoundedIcon />
+                    <DoneRoundedIcon
+                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
+                    />
                   </IconButton>
                 </Box>
               </AnimateX>

@@ -1,5 +1,11 @@
-import { Box, Button, TextField, Typography, useTheme } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {
+  Box,
+  Button,
+  lighten,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -15,8 +21,6 @@ export type Todo = {
 
 function TodoInput() {
   const theme = useTheme();
-
-  const COLOR_PALETTE: string[] = Object.values(theme.customColors);
 
   const [expanded, setExpanded] = useState<boolean>(false);
   const [todo, setTodo] = useState<Todo>({
@@ -58,7 +62,8 @@ function TodoInput() {
     <Box
       sx={{
         boxShadow: 3,
-        maxWidth: '700px',
+        width: '100%',
+        maxWidth: '1330px',
         padding: theme.padding.sm,
         borderRadius: theme.padding.xs,
       }}
@@ -74,9 +79,12 @@ function TodoInput() {
         />
         <Button
           variant="contained"
-          startIcon={<AddIcon />}
           onClick={handleSaveTodo}
-          sx={{ backgroundColor: theme.customColors.orange }}
+          sx={{
+            color: '#fff',
+            backgroundColor: lighten(theme.palette.primary.main, 0.2),
+            textTransform: 'capitalize',
+          }}
         >
           Add
         </Button>

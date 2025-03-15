@@ -4,13 +4,23 @@ import { Outlet } from 'react-router';
 
 const Layout = () => {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        width: '100%',
+      }}
+    >
       <DrawerAppBar />
       <Box
         sx={{
           marginTop: '4rem',
           padding: '1rem',
-          flexGrow: '1',
+          flexGrow: 1,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Outlet />
