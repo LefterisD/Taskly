@@ -1,4 +1,4 @@
-import { useTheme } from '@mui/material';
+import { lighten, useTheme } from '@mui/material';
 import { BarChart } from '@mui/x-charts/BarChart';
 
 type chartData = {
@@ -17,7 +17,7 @@ export default function Chart(props: chartProps) {
     <BarChart
       series={data.map((item) => ({
         ...item,
-        color: theme.customColors.lightBlue,
+        color: lighten(theme.palette.primary.main, 0.3),
       }))}
       height={240}
       xAxis={[{ data: ['Hours'], scaleType: 'band' }]}

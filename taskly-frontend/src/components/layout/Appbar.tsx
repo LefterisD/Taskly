@@ -21,6 +21,7 @@ const navItems = ['Home', 'Dashboard', 'About'];
 
 export default function DrawerAppBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const url = window.location.pathname;
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -35,13 +36,16 @@ export default function DrawerAppBar() {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
+        Taskly
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
+            <ListItemButton
+              sx={{ textAlign: 'center' }}
+              onClick={() => handleClick(item)}
+            >
               <ListItemText primary={item} />
             </ListItemButton>
           </ListItem>
@@ -90,7 +94,9 @@ export default function DrawerAppBar() {
                     width: '100%',
                     height: '2px', // Adjust thickness
                     backgroundColor: theme.palette.primary.main,
-                    transform: 'scaleX(0)',
+                    transform: url.includes(item.toLocaleLowerCase())
+                      ? 'scaleX(1)'
+                      : 'scaleX(0)',
                     transition: 'transform 0.3s ease-in-out',
                   },
                   '&:hover::before': {

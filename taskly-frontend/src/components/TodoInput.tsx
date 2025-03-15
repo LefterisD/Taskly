@@ -62,7 +62,8 @@ function TodoInput() {
     <Box
       sx={{
         boxShadow: 3,
-        maxWidth: '700px',
+        width: '100%',
+        maxWidth: '1330px',
         padding: theme.padding.sm,
         borderRadius: theme.padding.xs,
       }}
@@ -80,7 +81,7 @@ function TodoInput() {
           variant="contained"
           onClick={handleSaveTodo}
           sx={{
-            color: theme.palette.secondary.main,
+            color: '#fff',
             backgroundColor: lighten(theme.palette.primary.main, 0.2),
             textTransform: 'capitalize',
           }}

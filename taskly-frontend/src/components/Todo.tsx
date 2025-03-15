@@ -37,12 +37,12 @@ function Todo(props: TodoProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
-      style={{ maxWidth: '700px' }}
+      style={{ width: '100%', maxWidth: '1330px' }}
     >
       <Card
         sx={{
           display: 'flex',
-          maxWidth: '700px',
+          width: '100%',
           backgroundColor: lighten(lighten(todo.color, 0.9), 0.6),
           boxShadow: 3,
         }}
