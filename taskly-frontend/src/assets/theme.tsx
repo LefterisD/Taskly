@@ -9,6 +9,10 @@ declare module '@mui/material/styles' {
       violet: string;
       navigation: string;
     };
+    padding: {
+      xs: string;
+      sm: string;
+    };
   }
 
   interface ThemeOptions {
@@ -18,6 +22,10 @@ declare module '@mui/material/styles' {
       rose: string;
       violet: string;
       navigation: string;
+    };
+    padding: {
+      xs: string;
+      sm: string;
     };
   }
 }
@@ -38,6 +46,10 @@ const theme = createTheme({
     rose: '#FF006E',
     violet: '#8338EC',
     navigation: '#F8FBFC',
+  },
+  padding: {
+    xs: '.5rem',
+    sm: '1rem',
   },
 });
 
