@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import dayjs, { Dayjs } from 'dayjs';
 
-type Todo = {
+export type Todo = {
   text: string;
   color: string;
   date: Date | null;
@@ -58,12 +58,12 @@ function TodoInput() {
     <Box
       sx={{
         boxShadow: 3,
-        width: '700px',
+        maxWidth: '700px',
         padding: theme.padding.sm,
         borderRadius: theme.padding.xs,
       }}
     >
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <TextField
           id="outlined-basic"
           value={todo.text}
