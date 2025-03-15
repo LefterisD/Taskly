@@ -6,7 +6,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -22,8 +21,6 @@ export type Todo = {
 
 function TodoInput() {
   const theme = useTheme();
-
-  const COLOR_PALETTE: string[] = Object.values(theme.customColors);
 
   const [expanded, setExpanded] = useState<boolean>(false);
   const [todo, setTodo] = useState<Todo>({
