@@ -1,4 +1,4 @@
-import { Card, Typography, useTheme } from '@mui/material';
+import { Card, lighten, Typography, useTheme } from '@mui/material';
 import AnimateYTop from './animations/AnimateYTop';
 import AnimateYBottom from './animations/AnimateYBottom';
 
@@ -35,7 +35,7 @@ function InfoCard(props: InfoCardProps) {
       </Typography>
       <Typography
         variant="subtitle1"
-        sx={{ color: theme.palette.secondary.main }}
+        sx={{ color: lighten(theme.palette.secondary.main, 0.5) }}
       >
         {title}
       </Typography>

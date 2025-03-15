@@ -1,4 +1,11 @@
-import { Box, Button, TextField, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Button,
+  lighten,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -74,9 +81,12 @@ function TodoInput() {
         />
         <Button
           variant="contained"
-          startIcon={<AddIcon />}
           onClick={handleSaveTodo}
-          sx={{ backgroundColor: theme.customColors.orange }}
+          sx={{
+            color: theme.palette.secondary.main,
+            backgroundColor: lighten(theme.palette.primary.main, 0.2),
+            textTransform: 'capitalize',
+          }}
         >
           Add
         </Button>

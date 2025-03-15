@@ -14,6 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router';
+import { useTheme } from '@mui/material';
 
 const drawerWidth = 240;
 const navItems = ['Home', 'Dashboard', 'About'];
@@ -21,6 +22,7 @@ const navItems = ['Home', 'Dashboard', 'About'];
 export default function DrawerAppBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -51,7 +53,7 @@ export default function DrawerAppBar() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar component="nav">
+      <AppBar component="nav" sx={{ backgroundColor: theme.customColors.grey }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -65,7 +67,11 @@ export default function DrawerAppBar() {
           <Typography
             variant="h4"
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' }, marginRight: 2 }}
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              marginRight: 2,
+              color: theme.palette.secondary.main,
+            }}
           >
             Taskly
           </Typography>
@@ -73,7 +79,24 @@ export default function DrawerAppBar() {
             {navItems.map((item) => (
               <Button
                 key={item}
-                sx={{ color: '#fff' }}
+                sx={{
+                  color: theme.palette.secondary.main,
+
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '2px', // Adjust thickness
+                    backgroundColor: theme.palette.primary.main,
+                    transform: 'scaleX(0)',
+                    transition: 'transform 0.3s ease-in-out',
+                  },
+                  '&:hover::before': {
+                    transform: 'scaleX(1)',
+                  },
+                }}
                 onClick={() => handleClick(item)}
               >
                 {item}
