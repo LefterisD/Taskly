@@ -59,6 +59,10 @@ class TodoAPI(Resource):
 
             created_at = datetime.fromisoformat(data["created"])
 
+            completed_at = None
+            if data["completed_at"]:
+                completed_at = datetime.fromisoformat(data["completed_at"])
+
             todo = Todo.query.get(id)
 
             if not todo:
@@ -67,6 +71,8 @@ class TodoAPI(Resource):
             todo.name = data["name"]
             todo.color = data["color"]
             todo.created = created_at
+            todo.completed = data["completed"]
+            todo.completed_at = completed_at
 
             db.session.commit() 
             db.session.refresh(todo) 
@@ -106,14 +112,21 @@ class TodoAPI(Resource):
             total_in_progress = db.session.query(func.count(Todo.id)).filter(Todo.completed ==False).scalar()
 
             upcoming = 0
+            total_hours = 0
             for todo in todos:
-                if datetime.fromisoformat(todo.created) > datetime.now():
+                if todo.created > datetime.now():
                     upcoming += 1
+                if todo.completed and todo.completed_at:
+                    time_difference = (todo.completed_at - todo.created).total_seconds() / 3600 
+                    total_hours += time_difference 
             
 
             return {
                 "completed": total_completed,
-                "in_progress": total_in_progress
+                "in_progress": total_in_progress,
+                "upcoming": upcoming,
+                "total_hours": total_hours
             }, 200
+        
         except Exception as e:
             return {"message": f"An error occurred: {str(e)}"}, 500

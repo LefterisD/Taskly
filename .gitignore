@@ -49,3 +49,4 @@ __pycache__/
 
 # Ignore environment variables (if using dotenv)
 .env
+.flaskenv
