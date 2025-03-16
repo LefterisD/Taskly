@@ -24,10 +24,11 @@ import { queryClient } from '../api/QueryClient';
 
 interface TodoProps {
   todo: TodoType;
+  showcase?: boolean;
 }
 
 function Todo(props: TodoProps) {
-  const { todo: originalTodo } = props;
+  const { todo: originalTodo, showcase = false } = props;
   const theme = useTheme();
   const [edit, setEdit] = useState<boolean>(false);
   const [todo, setTodo] = useState<TodoType>({
@@ -218,7 +219,7 @@ function Todo(props: TodoProps) {
                   <IconButton
                     aria-label="delete"
                     onClick={() => handleDelete(todo.id)}
-                    disabled={isDeleting}
+                    disabled={isDeleting || showcase}
                   >
                     <DeleteRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
@@ -228,7 +229,7 @@ function Todo(props: TodoProps) {
                     <IconButton
                       aria-label="check"
                       onClick={() => handleComplete(todo)}
-                      disabled={isEditing}
+                      disabled={isEditing || showcase}
                     >
                       <CheckRoundedIcon
                         sx={{
@@ -258,7 +259,7 @@ function Todo(props: TodoProps) {
                   <IconButton
                     aria-label="save"
                     onClick={() => handleEdit(todo)}
-                    disabled={isEditing}
+                    disabled={isEditing || showcase}
                   >
                     <DoneRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
