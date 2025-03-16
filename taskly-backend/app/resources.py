@@ -7,7 +7,7 @@ from flask import request
 ns = Namespace("api")
 
 @ns.route("/todos")
-class TodoAPI(Resource):
+class TodoListAPI(Resource):
     @ns.marshal_list_with(todo_model)
     def get(self):
         try:
@@ -39,5 +39,39 @@ class TodoAPI(Resource):
             db.session.rollback()  # Rollback if an error occurs
             return {"message": f"An error occurred: {str(e)}"}, 400
 
+        finally:
+            db.session.close()  # Ensure session is closed properly
+
+@ns.route("/todos/<int:id>")
+class TodoAPI(Resource):
+    @ns.expect(todo_input_model)
+    @ns.marshal_with(todo_model)
+    def put(self, id):
+        try:
+            data = request.json  
+
+            if not data:
+                return {"message": "Invalid request, JSON body missing"}, 400 
+
+            created_at = datetime.fromisoformat(data["created"])
+
+            todo = Todo.query.get(id)
+
+            if not todo:
+                return {"message": "Todo not found"}, 404 
+
+            print(todo)
+
+            todo.name = data["name"]
+            todo.color = data["color"]
+            todo.created = created_at
+
+            db.session.commit()
+
+            db.session.refresh(todo) 
+
+            return todo, 200
+        except Exception as e:
+            return {"message": f"An error occurred: {str(e)}"}, 404
         finally:
             db.session.close()  # Ensure session is closed properly
