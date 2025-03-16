@@ -13,6 +13,7 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
@@ -106,6 +107,11 @@ function Todo(props: TodoProps) {
                   </IconButton>
                   <IconButton aria-label="delete">
                     <DeleteRoundedIcon
+                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
+                    />
+                  </IconButton>
+                  <IconButton aria-label="check">
+                    <CheckRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />
                   </IconButton>
