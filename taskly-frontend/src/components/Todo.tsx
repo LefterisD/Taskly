@@ -64,6 +64,14 @@ function Todo(props: TodoProps) {
     }));
   };
 
+  const handleComplete = (todo: TodoType) => {
+    const todoCopy: TodoType = { ...todo };
+
+    todoCopy.completed = true;
+
+    editTodo({ data: { todo: todoCopy } });
+  };
+
   const handleEdit = (todo: TodoType) => {
     setEdit(true);
 
@@ -72,6 +80,11 @@ function Todo(props: TodoProps) {
 
   const handleDelete = (id: number) => {
     deleteTodo({ id });
+  };
+
+  const invalidateApis = () => {
+    queryClient.invalidateQueries({ queryKey: ['todos'] });
+    queryClient.invalidateQueries({ queryKey: ['stats'] });
   };
 
   useEffect(() => {
@@ -86,7 +99,7 @@ function Todo(props: TodoProps) {
 
     if (status === 'ok') {
       setEdit(false);
-      queryClient.invalidateQueries({ queryKey: ['todos'] });
+      invalidateApis();
     }
   }, [editResult]);
 
@@ -101,7 +114,7 @@ function Todo(props: TodoProps) {
     createSnackbar(message, type, 3000);
 
     if (status === 'ok') {
-      queryClient.invalidateQueries({ queryKey: ['todos'] });
+      invalidateApis();
     }
   }, [deleteResult]);
 
@@ -122,7 +135,8 @@ function Todo(props: TodoProps) {
           display: 'flex',
           width: '100%',
           backgroundColor: lighten(lighten(todo.color, 0.9), 0.6),
-          boxShadow: 3,
+          boxShadow: todo.completed ? 0 : 3,
+          opacity: todo.completed ? 0.6 : 1,
         }}
       >
         <Box sx={{ width: '.5rem', background: todo.color }}></Box>
@@ -177,7 +191,11 @@ function Todo(props: TodoProps) {
             ) : (
               <Typography
                 variant="subtitle1"
-                sx={{ flexGrow: 1, color: theme.palette.secondary.main }}
+                sx={{
+                  flexGrow: 1,
+                  color: theme.palette.secondary.main,
+                  textDecoration: todo.completed ? 'line-through' : 'none',
+                }}
               >
                 {todo.name}
               </Typography>
@@ -188,11 +206,15 @@ function Todo(props: TodoProps) {
             {!edit && (
               <AnimateX key="view-mode">
                 <Box sx={{ margin: '0 auto' }}>
-                  <IconButton aria-label="edit" onClick={() => setEdit(true)}>
-                    <EditRoundedIcon
-                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
-                    />
-                  </IconButton>
+                  {!todo.completed && (
+                    <IconButton aria-label="edit" onClick={() => setEdit(true)}>
+                      <EditRoundedIcon
+                        sx={{
+                          color: lighten(theme.palette.secondary.main, 0.7),
+                        }}
+                      />
+                    </IconButton>
+                  )}
                   <IconButton
                     aria-label="delete"
                     onClick={() => handleDelete(todo.id)}
@@ -202,11 +224,19 @@ function Todo(props: TodoProps) {
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />
                   </IconButton>
-                  <IconButton aria-label="check">
-                    <CheckRoundedIcon
-                      sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
-                    />
-                  </IconButton>
+                  {!todo.completed && (
+                    <IconButton
+                      aria-label="check"
+                      onClick={() => handleComplete(todo)}
+                      disabled={isEditing}
+                    >
+                      <CheckRoundedIcon
+                        sx={{
+                          color: lighten(theme.palette.secondary.main, 0.7),
+                        }}
+                      />
+                    </IconButton>
+                  )}
                 </Box>
               </AnimateX>
             )}

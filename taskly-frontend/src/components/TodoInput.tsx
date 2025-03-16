@@ -26,21 +26,22 @@ export type Todo = {
   completed_at: Date | null;
 };
 
-const todoTemplate: Todo = {
-  id: 0,
-  name: '',
-  color: '',
-  created: new Date(),
-  hours: 0,
-  completed: false,
-  completed_at: null,
-};
-
 function TodoInput() {
   const theme = useTheme();
   const { createSnackbar } = useSnackbar();
 
   const [expanded, setExpanded] = useState<boolean>(false);
+
+  const todoTemplate: Todo = {
+    id: 0,
+    name: '',
+    color: theme.palette.primary.main,
+    created: new Date(),
+    hours: 0,
+    completed: false,
+    completed_at: null,
+  };
+
   const [todo, setTodo] = useState<Todo>({ ...todoTemplate });
 
   const {
@@ -75,8 +76,6 @@ function TodoInput() {
   };
 
   const handleSaveTodo = () => {
-    console.log(todo);
-
     createTodo({ data: { todo: todo } });
   };
 
@@ -89,11 +88,12 @@ function TodoInput() {
     const type = status === 'ok' ? 'success' : 'error';
 
     createSnackbar(message, type, 3000);
-
+    console.log(createResult);
     if (status === 'ok') {
       setTodo({ ...todoTemplate });
       setExpanded(false);
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
     }
   }, [createResult]);
 
