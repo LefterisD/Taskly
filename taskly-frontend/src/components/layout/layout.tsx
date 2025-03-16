@@ -16,7 +16,6 @@ const Layout = () => {
       <Box
         sx={{
           marginTop: '4rem',
-          padding: '1rem',
           flexGrow: 1,
           display: 'flex',
           justifyContent: 'center',
