@@ -28,7 +28,7 @@ class TodoListAPI(Resource):
             if not data:
                 return {"message": "Invalid JSON payload"}, 400
 
-            created_at = datetime.fromisoformat(data["created"])
+            created_at = datetime.fromisoformat(data["created"].replace("Z", "+00:00"))
 
             todo = Todo(name=data["name"], color=data["color"], created=created_at)
 
