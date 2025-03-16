@@ -9,15 +9,21 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import dayjs, { Dayjs } from 'dayjs';
 import { useSnackbar } from '../context/SnackbarContext';
+import { useCreateTodo } from '../api/hooks/useTodo';
+import { queryClient } from '../api/QueryClient';
 
 export type Todo = {
-  text: string;
+  id: number;
+  name: string;
   color: string;
-  date: Date | null;
+  created: Date | null;
+  hours: number;
+  completed: boolean;
+  completed_at: Date | null;
 };
 
 function TodoInput() {
@@ -25,11 +31,24 @@ function TodoInput() {
   const { createSnackbar } = useSnackbar();
 
   const [expanded, setExpanded] = useState<boolean>(false);
-  const [todo, setTodo] = useState<Todo>({
-    text: '',
-    color: '',
-    date: new Date(),
-  });
+
+  const todoTemplate: Todo = {
+    id: 0,
+    name: '',
+    color: theme.palette.primary.main,
+    created: new Date(),
+    hours: 0,
+    completed: false,
+    completed_at: null,
+  };
+
+  const [todo, setTodo] = useState<Todo>({ ...todoTemplate });
+
+  const {
+    mutate: createTodo,
+    isPending: isCreating,
+    createResult,
+  } = useCreateTodo();
 
   const handleExpandedClick = () => {
     setExpanded(!expanded);
@@ -45,21 +64,38 @@ function TodoInput() {
   const handleDateChange = (value: Dayjs | null) => {
     setTodo((prevState: Todo) => ({
       ...prevState,
-      date: value ? value.toDate() : null,
+      created: value ? value.toDate() : null,
     }));
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTodo((prevState: Todo) => ({
       ...prevState,
-      text: event.target.value,
+      name: event.target.value,
     }));
   };
 
   const handleSaveTodo = () => {
-    console.log(todo);
-    createSnackbar('Todo created!', 'success', 3000);
+    createTodo({ data: { todo: todo } });
   };
+
+  useEffect(() => {
+    if (!createResult) return;
+
+    const { status } = createResult;
+    const message =
+      status === 'ok' ? 'Todo created successfully' : 'Could not create todo';
+    const type = status === 'ok' ? 'success' : 'error';
+
+    createSnackbar(message, type, 3000);
+    console.log(createResult);
+    if (status === 'ok') {
+      setTodo({ ...todoTemplate });
+      setExpanded(false);
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+    }
+  }, [createResult]);
 
   return (
     <Box
@@ -74,7 +110,7 @@ function TodoInput() {
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <TextField
           id="outlined-basic"
-          value={todo.text}
+          value={todo.name}
           onChange={handleTextChange}
           variant="standard"
           placeholder="Add a new todo"
@@ -88,6 +124,7 @@ function TodoInput() {
             backgroundColor: lighten(theme.palette.primary.main, 0.2),
             textTransform: 'capitalize',
           }}
+          disabled={isCreating}
         >
           Add
         </Button>
@@ -125,7 +162,7 @@ function TodoInput() {
               Select starting from:
             </Typography>
             <DatePicker
-              value={todo.date ? dayjs(todo.date) : null}
+              value={todo.created ? dayjs(todo.created) : null}
               onChange={handleDateChange}
             />
           </Box>

@@ -8,24 +8,43 @@ import { useState } from 'react';
 function About() {
   const theme = useTheme();
 
-  const todo: TodoType = {
-    text: 'This is a todo to do in the future',
-    date: new Date(),
-    color: theme.customColors.indigo,
-  };
-
   const [todos, setTodos] = useState<TodoType[]>([
     {
-      ...todo,
-      text: 'Make a shopping list',
-      color: theme.palette.primary.main,
+      id: 0,
+      created: new Date(),
+      completed: false,
+      completed_at: null,
+      hours: 0,
+      name: 'Make a shopping list',
+      color: '#83B251',
     },
     {
-      ...todo,
-      text: 'Refactor home component',
-      color: theme.customColors.jasmin,
+      id: 0,
+      created: new Date(),
+      completed: true,
+      completed_at: null,
+      hours: 0,
+      name: 'Create project for hack the box',
+      color: '#FF9F1C',
     },
-    { ...todo, text: 'Bake a cake', color: theme.customColors.violet },
+    {
+      id: 0,
+      created: new Date(),
+      completed: false,
+      completed_at: null,
+      hours: 0,
+      name: 'Go for a run',
+      color: '#EA3546',
+    },
+    {
+      id: 0,
+      created: new Date(),
+      completed: false,
+      completed_at: null,
+      hours: 0,
+      name: 'Go to IKEA',
+      color: '#FFBE0B',
+    },
   ]);
 
   const title: string = 'Taskly';
@@ -146,7 +165,7 @@ function About() {
             flexGrow: 1,
           }}
         >
-          {todos.slice(0, 3).map((todo: TodoType, index: number) => (
+          {todos.map((todo: TodoType, index: number) => (
             <motion.div
               key={index}
               variants={todoVariants}
@@ -157,7 +176,7 @@ function About() {
               style={{ width: '100%' }}
             >
               <Grid size={{ xs: 12, md: 12, lg: 12 }} sx={{ width: '100%' }}>
-                <Todo todo={todo} />
+                <Todo todo={todo} showcase={true} />
               </Grid>
             </motion.div>
           ))}

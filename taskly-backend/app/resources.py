@@ -28,7 +28,7 @@ class TodoListAPI(Resource):
             if not data:
                 return {"message": "Invalid JSON payload"}, 400
 
-            created_at = datetime.fromisoformat(data["created"])
+            created_at = datetime.fromisoformat(data["created"].replace("Z", "+00:00"))
 
             todo = Todo(name=data["name"], color=data["color"], created=created_at)
 
@@ -53,15 +53,15 @@ class TodoAPI(Resource):
     def put(self, id):
         try:
             data = request.json  
-
+            print(data)
             if not data:
                 return {"message": "Invalid request, JSON body missing"}, 400 
 
-            created_at = datetime.fromisoformat(data["created"])
+            created_at = datetime.fromisoformat(data["created"].replace("Z", "+00:00"))
 
             completed_at = None
             if data["completed_at"]:
-                completed_at = datetime.fromisoformat(data["completed_at"])
+                completed_at = datetime.fromisoformat(data["completed_at"].replace("Z", "+00:00"))
 
             todo = Todo.query.get(id)
 
