@@ -14,10 +14,13 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import AnimateX from './animations/AnimateX';
+import { useDeleteTodo } from '../api/hooks/useTodo';
+import { useSnackbar } from '../context/SnackbarContext';
+import { queryClient } from '../api/QueryClient';
 
 interface TodoProps {
   todo: TodoType;
@@ -28,9 +31,38 @@ function Todo(props: TodoProps) {
   const theme = useTheme();
   const [edit, setEdit] = useState<boolean>(false);
 
+  const { createSnackbar } = useSnackbar();
+
+  const {
+    mutate: deleteTodo,
+    isPending: isDeleting,
+    deleteResult,
+  } = useDeleteTodo();
+
   const handleEdit = () => {
     setEdit(!edit);
   };
+
+  const handleDelete = (id: number) => {
+    deleteTodo({ id });
+  };
+
+  useEffect(() => {
+    if (!deleteResult) return;
+
+    const { status } = deleteResult;
+    const message =
+      status === 'ok' ? 'Todo deleted successfully' : 'Could not delete todo';
+    const type = status === 'ok' ? 'success' : 'error';
+
+    createSnackbar(message, type, 3000);
+
+    if (status === 'ok') {
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    }
+  }, [deleteResult]);
+
+  console.log(isDeleting);
 
   return (
     <motion.div
@@ -107,7 +139,11 @@ function Todo(props: TodoProps) {
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />
                   </IconButton>
-                  <IconButton aria-label="delete">
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => handleDelete(todo.id)}
+                    disabled={isDeleting}
+                  >
                     <DeleteRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />

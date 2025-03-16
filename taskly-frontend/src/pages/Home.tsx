@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid2';
 import TodoInput, { Todo as TodoType } from '../components/TodoInput';
 import Todo from '../components/Todo';
 import { useEffect, useState } from 'react';
-import { Box, useTheme } from '@mui/material';
+import { Box, lighten, Typography, useTheme } from '@mui/material';
 import { useGetTodos } from '../api/hooks/useTodo';
 import Spinner from '../components/Spinner';
 
@@ -49,6 +49,14 @@ const Home = () => {
               </Grid>
             );
           })}
+        {!isLoading && todos.length === 0 && (
+          <Typography
+            variant="h4"
+            sx={{ color: lighten(theme.palette.secondary.main, 0.8) }}
+          >
+            No todos yet, start planning.
+          </Typography>
+        )}
       </Grid>
     </Box>
   );
