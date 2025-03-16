@@ -2,6 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   DeletePayload,
   deleteTodo,
+  EditPayload,
+  editTodo,
   getStats,
   getTodos,
 } from '../endpoints/Todo';
@@ -43,4 +45,20 @@ export const useDeleteTodo = () => {
   });
 
   return { ...mutation, deleteResult };
+};
+
+export const useEditTodo = () => {
+  const [editResult, setEditResult] = useState<DeleteResult | null>(null);
+
+  const mutation = useMutation({
+    mutationFn: (payload: EditPayload) => editTodo(payload),
+    onSuccess: () => {
+      setEditResult({ status: 'ok' });
+    },
+    onError: () => {
+      setEditResult({ status: 'error' });
+    },
+  });
+
+  return { ...mutation, editResult };
 };

@@ -16,9 +16,9 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import AnimateX from './animations/AnimateX';
-import { useDeleteTodo } from '../api/hooks/useTodo';
+import { useDeleteTodo, useEditTodo } from '../api/hooks/useTodo';
 import { useSnackbar } from '../context/SnackbarContext';
 import { queryClient } from '../api/QueryClient';
 
@@ -27,9 +27,18 @@ interface TodoProps {
 }
 
 function Todo(props: TodoProps) {
-  const { todo } = props;
+  const { todo: originalTodo } = props;
   const theme = useTheme();
   const [edit, setEdit] = useState<boolean>(false);
+  const [todo, setTodo] = useState<TodoType>({
+    id: 0,
+    name: '',
+    color: '#f5f5f5',
+    created: new Date(),
+    hours: 0,
+    completed: false,
+    completed_at: new Date(),
+  });
 
   const { createSnackbar } = useSnackbar();
 
@@ -39,13 +48,47 @@ function Todo(props: TodoProps) {
     deleteResult,
   } = useDeleteTodo();
 
-  const handleEdit = () => {
-    setEdit(!edit);
+  const { mutate: editTodo, isPending: isEditing, editResult } = useEditTodo();
+
+  const handleInputChanges = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo((prevState: TodoType) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleDateChange = (value: Dayjs | null) => {
+    setTodo((prevState: TodoType) => ({
+      ...prevState,
+      created: value ? value.toDate() : null,
+    }));
+  };
+
+  const handleEdit = (todo: TodoType) => {
+    setEdit(true);
+
+    editTodo({ data: { todo: todo } });
   };
 
   const handleDelete = (id: number) => {
     deleteTodo({ id });
   };
+
+  useEffect(() => {
+    if (!editResult) return;
+
+    const { status } = editResult;
+    const message =
+      status === 'ok' ? 'Todo updated successfully' : 'Could not update todo';
+    const type = status === 'ok' ? 'success' : 'error';
+
+    createSnackbar(message, type, 3000);
+
+    if (status === 'ok') {
+      setEdit(false);
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    }
+  }, [editResult]);
 
   useEffect(() => {
     if (!deleteResult) return;
@@ -62,7 +105,9 @@ function Todo(props: TodoProps) {
     }
   }, [deleteResult]);
 
-  console.log(isDeleting);
+  useEffect(() => {
+    if (originalTodo) setTodo({ ...originalTodo });
+  }, [originalTodo]);
 
   return (
     <motion.div
@@ -110,13 +155,22 @@ function Todo(props: TodoProps) {
                 >
                   <TextField
                     id="outlined-basic"
+                    name="name"
                     value={todo.name}
                     variant="standard"
                     placeholder="Add a new todo"
+                    onChange={handleInputChanges}
                   />
-                  <input type="color" value={todo.color} />
+                  <input
+                    type="color"
+                    name="color"
+                    value={todo.color}
+                    onChange={handleInputChanges}
+                  />
                   <DatePicker
                     value={todo.created ? dayjs(todo.created) : null}
+                    name="created"
+                    onChange={handleDateChange}
                   />
                 </Box>
               </motion.div>
@@ -160,12 +214,21 @@ function Todo(props: TodoProps) {
             {edit && (
               <AnimateX key="edit-mode">
                 <Box sx={{ margin: '0 auto' }}>
-                  <IconButton aria-label="discard" onClick={handleEdit}>
+                  <IconButton
+                    aria-label="discard"
+                    onClick={() => {
+                      setEdit(false);
+                      setTodo({ ...originalTodo });
+                    }}
+                  >
                     <CloseRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />
                   </IconButton>
-                  <IconButton aria-label="save">
+                  <IconButton
+                    aria-label="save"
+                    onClick={() => handleEdit(todo)}
+                  >
                     <DoneRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />
