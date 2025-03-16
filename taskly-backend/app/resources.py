@@ -36,11 +36,11 @@ class TodoListAPI(Resource):
             return todo, 201
      
         except Exception as e:
-            db.session.rollback()  # Rollback if an error occurs
+            db.session.rollback()  
             return {"message": f"An error occurred: {str(e)}"}, 400
 
         finally:
-            db.session.close()  # Ensure session is closed properly
+            db.session.remove()  
 
 @ns.route("/todos/<int:id>")
 class TodoAPI(Resource):
@@ -60,18 +60,34 @@ class TodoAPI(Resource):
             if not todo:
                 return {"message": "Todo not found"}, 404 
 
-            print(todo)
-
             todo.name = data["name"]
             todo.color = data["color"]
             todo.created = created_at
 
-            db.session.commit()
-
+            db.session.commit() 
             db.session.refresh(todo) 
 
             return todo, 200
         except Exception as e:
+            db.session.rollback() 
             return {"message": f"An error occurred: {str(e)}"}, 404
         finally:
-            db.session.close()  # Ensure session is closed properly
+            db.session.remove()  
+
+    def delete(self, id):
+        try:
+            todo = Todo.query.get(id)
+
+            if not todo:
+                return {"message": "Todo not found"}, 404 
+
+
+            db.session.delete(todo)
+            db.session.commit()
+
+            return {"message": "Todo deleted successfully"}, 200 
+        except Exception as e:
+            db.session.rollback() 
+            return {"message": f"An error occurred: {str(e)}"}, 404
+        finally:
+            db.session.remove()  
