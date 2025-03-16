@@ -31,7 +31,7 @@ function InfoCard(props: InfoCardProps) {
       }}
     >
       <Typography variant="h2" sx={{ color: styling.valueColor }}>
-        {value}
+        {value.toFixed(1)}
       </Typography>
       <Typography
         variant="subtitle1"

@@ -69,6 +69,7 @@ function Todo(props: TodoProps) {
     const todoCopy: TodoType = { ...todo };
 
     todoCopy.completed = true;
+    todoCopy.completed_at = new Date();
 
     editTodo({ data: { todo: todoCopy } });
   };
