@@ -78,12 +78,14 @@ function Todo(props: TodoProps) {
                 >
                   <TextField
                     id="outlined-basic"
-                    value={todo.text}
+                    value={todo.name}
                     variant="standard"
                     placeholder="Add a new todo"
                   />
                   <input type="color" value={todo.color} />
-                  <DatePicker value={todo.date ? dayjs(todo.date) : null} />
+                  <DatePicker
+                    value={todo.created ? dayjs(todo.created) : null}
+                  />
                 </Box>
               </motion.div>
             ) : (
@@ -91,7 +93,7 @@ function Todo(props: TodoProps) {
                 variant="subtitle1"
                 sx={{ flexGrow: 1, color: theme.palette.secondary.main }}
               >
-                {todo.text}
+                {todo.name}
               </Typography>
             )}
           </AnimatePresence>

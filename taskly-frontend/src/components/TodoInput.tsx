@@ -15,9 +15,13 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useSnackbar } from '../context/SnackbarContext';
 
 export type Todo = {
-  text: string;
+  id: number;
+  name: string;
   color: string;
-  date: Date | null;
+  created: Date | null;
+  hours: number;
+  completed: boolean;
+  completed_at: Date;
 };
 
 function TodoInput() {
@@ -26,9 +30,13 @@ function TodoInput() {
 
   const [expanded, setExpanded] = useState<boolean>(false);
   const [todo, setTodo] = useState<Todo>({
-    text: '',
+    id: 0,
+    name: '',
     color: '',
-    date: new Date(),
+    created: new Date(),
+    hours: 0,
+    completed: false,
+    completed_at: new Date(),
   });
 
   const handleExpandedClick = () => {
@@ -74,7 +82,7 @@ function TodoInput() {
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <TextField
           id="outlined-basic"
-          value={todo.text}
+          value={todo.name}
           onChange={handleTextChange}
           variant="standard"
           placeholder="Add a new todo"
@@ -125,7 +133,7 @@ function TodoInput() {
               Select starting from:
             </Typography>
             <DatePicker
-              value={todo.date ? dayjs(todo.date) : null}
+              value={todo.created ? dayjs(todo.created) : null}
               onChange={handleDateChange}
             />
           </Box>

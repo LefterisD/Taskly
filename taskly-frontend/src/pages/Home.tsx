@@ -1,23 +1,22 @@
 import Grid from '@mui/material/Grid2';
 import TodoInput, { Todo as TodoType } from '../components/TodoInput';
 import Todo from '../components/Todo';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
+import { useGetTodos } from '../api/hooks/useTodo';
+import Spinner from '../components/Spinner';
 
 const Home = () => {
   const theme = useTheme();
-  const todo: TodoType = {
-    text: 'This is a todo fdsh js hjdfh ',
-    date: new Date(),
-    color: theme.customColors.indigo,
-  };
+  const [todos, setTodos] = useState<TodoType[]>([]);
 
-  const [todos, setTodos] = useState<TodoType[]>([
-    todo,
-    { ...todo, color: theme.palette.primary.main },
-    { ...todo, color: theme.customColors.jasmin },
-    { ...todo, color: theme.customColors.violet },
-  ]);
+  const { data: userTodos, isLoading } = useGetTodos();
+
+  useEffect(() => {
+    if (userTodos) {
+      setTodos(userTodos);
+    }
+  }, [userTodos]);
 
   return (
     <Box
@@ -40,7 +39,9 @@ const Home = () => {
         <Grid size={{ xs: 12, lg: 7 }} sx={{ mb: 4, width: '100%' }}>
           <TodoInput />
         </Grid>
-        {todos.length !== 0 &&
+        {isLoading && <Spinner />}
+        {!isLoading &&
+          todos.length !== 0 &&
           todos.map((todo: TodoType) => {
             return (
               <Grid size={{ xs: 12, lg: 7 }} sx={{ width: '100%' }}>
