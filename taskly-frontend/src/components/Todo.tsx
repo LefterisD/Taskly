@@ -188,7 +188,7 @@ function Todo(props: TodoProps) {
             {!edit && (
               <AnimateX key="view-mode">
                 <Box sx={{ margin: '0 auto' }}>
-                  <IconButton aria-label="edit" onClick={handleEdit}>
+                  <IconButton aria-label="edit" onClick={() => setEdit(true)}>
                     <EditRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
                     />
