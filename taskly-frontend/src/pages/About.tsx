@@ -3,12 +3,11 @@ import { Todo as TodoType } from '../components/TodoInput';
 import { motion } from 'framer-motion';
 import Grid from '@mui/material/Grid2';
 import Todo from '../components/Todo';
-import { useState } from 'react';
 
 function About() {
   const theme = useTheme();
 
-  const [todos, setTodos] = useState<TodoType[]>([
+  const todos: TodoType[] = [
     {
       id: 0,
       created: new Date(),
@@ -45,7 +44,7 @@ function About() {
       name: 'Go to IKEA',
       color: '#FFBE0B',
     },
-  ]);
+  ];
 
   const title: string = 'Taskly';
 
