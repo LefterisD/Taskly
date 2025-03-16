@@ -12,6 +12,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import dayjs, { Dayjs } from 'dayjs';
+import { useSnackbar } from '../context/SnackbarContext';
 
 export type Todo = {
   text: string;
@@ -21,6 +22,7 @@ export type Todo = {
 
 function TodoInput() {
   const theme = useTheme();
+  const { createSnackbar } = useSnackbar();
 
   const [expanded, setExpanded] = useState<boolean>(false);
   const [todo, setTodo] = useState<Todo>({
@@ -56,6 +58,7 @@ function TodoInput() {
 
   const handleSaveTodo = () => {
     console.log(todo);
+    createSnackbar('Todo created!', 'success', 3000);
   };
 
   return (
