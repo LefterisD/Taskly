@@ -9,3 +9,11 @@ export const getTodos = async ({ queryKey }: { queryKey: QueryKey }) => {
 
   return response.data;
 };
+
+export const getStats = async ({ queryKey }: { queryKey: QueryKey }) => {
+  const [_key] = queryKey;
+
+  const response: AxiosResponse = await instance.get(`api/todos/stats`);
+
+  return response.data;
+};
