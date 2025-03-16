@@ -1,8 +1,9 @@
 from flask_restx import Resource, Namespace
 from .models.models import *
-from .api_models import todo_model, todo_input_model
+from .api_models import todo_model, todo_input_model, todo_input_model_post
 from .extensions import db
 from flask import request
+from sqlalchemy.sql import func
 
 ns = Namespace("api")
 
@@ -18,11 +19,14 @@ class TodoListAPI(Resource):
             return {"message": f"An error occurred: {str(e)}"}, 500
         
 
-    @ns.expect(todo_input_model)
+    @ns.expect(todo_input_model_post)
     @ns.marshal_with(todo_model)
     def post(self):
         try:
-            data = request.json  
+            data = request.get_json()  
+
+            if not data:
+                return {"message": "Invalid JSON payload"}, 400
 
             created_at = datetime.fromisoformat(data["created"])
 
@@ -40,7 +44,7 @@ class TodoListAPI(Resource):
             return {"message": f"An error occurred: {str(e)}"}, 400
 
         finally:
-            db.session.remove()  
+            db.session.close()  
 
 @ns.route("/todos/<int:id>")
 class TodoAPI(Resource):
@@ -72,12 +76,11 @@ class TodoAPI(Resource):
             db.session.rollback() 
             return {"message": f"An error occurred: {str(e)}"}, 404
         finally:
-            db.session.remove()  
+            db.session.close()  
 
     def delete(self, id):
         try:
             todo = Todo.query.get(id)
-
             if not todo:
                 return {"message": "Todo not found"}, 404 
 
@@ -91,3 +94,26 @@ class TodoAPI(Resource):
             return {"message": f"An error occurred: {str(e)}"}, 404
         finally:
             db.session.remove()  
+
+
+@ns.route("/todos/stats")
+class TodoAPI(Resource):
+    def get(self):
+        try:
+            todos = Todo.query.all()
+
+            total_completed = db.session.query(func.count(Todo.id)).filter(Todo.completed ==True).scalar()
+            total_in_progress = db.session.query(func.count(Todo.id)).filter(Todo.completed ==False).scalar()
+
+            upcoming = 0
+            for todo in todos:
+                if datetime.fromisoformat(todo.created) > datetime.now():
+                    upcoming += 1
+            
+
+            return {
+                "completed": total_completed,
+                "in_progress": total_in_progress
+            }, 200
+        except Exception as e:
+            return {"message": f"An error occurred: {str(e)}"}, 500
