@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
+  createTodo,
   DeletePayload,
   deleteTodo,
   EditPayload,
@@ -61,4 +62,20 @@ export const useEditTodo = () => {
   });
 
   return { ...mutation, editResult };
+};
+
+export const useCreateTodo = () => {
+  const [createResult, setCreateResult] = useState<DeleteResult | null>(null);
+
+  const mutation = useMutation({
+    mutationFn: (payload: EditPayload) => createTodo(payload),
+    onSuccess: () => {
+      setCreateResult({ status: 'ok' });
+    },
+    onError: () => {
+      setCreateResult({ status: 'error' });
+    },
+  });
+
+  return { ...mutation, createResult };
 };

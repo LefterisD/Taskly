@@ -47,3 +47,14 @@ export const editTodo = async (payload: EditPayload) => {
 
   return response.data;
 };
+
+export const createTodo = async (payload: EditPayload) => {
+  const { id, ...todoWithoutId } = payload.data.todo;
+
+  const response: AxiosResponse = await instance.post(
+    `api/todos`,
+    todoWithoutId
+  );
+
+  return response.data;
+};

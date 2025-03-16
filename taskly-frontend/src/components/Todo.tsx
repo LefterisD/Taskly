@@ -37,7 +37,7 @@ function Todo(props: TodoProps) {
     created: new Date(),
     hours: 0,
     completed: false,
-    completed_at: new Date(),
+    completed_at: null,
   });
 
   const { createSnackbar } = useSnackbar();
@@ -228,6 +228,7 @@ function Todo(props: TodoProps) {
                   <IconButton
                     aria-label="save"
                     onClick={() => handleEdit(todo)}
+                    disabled={isEditing}
                   >
                     <DoneRoundedIcon
                       sx={{ color: lighten(theme.palette.secondary.main, 0.7) }}
