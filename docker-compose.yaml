@@ -18,7 +18,7 @@ services:
     ports:
       - '3000:80' # Map React frontend to port 3000
     environment:
-      - VITE_API_URL=http://taskly-backend:5001/ # Set API URL inside Docker
+      - VITE_API_BASE_URL=http://taskly-backend:5001/ # Set API URL inside Docker
     depends_on:
       - backend
     volumes:
