@@ -13,9 +13,6 @@ RUN npm install
 # Copy the entire project
 COPY . .
 
-# Generate .env file dynamically
-RUN echo "VITE_API_URL=${VITE_API_URL}" > .env
-
 # Build the React app
 RUN npm run build
 
@@ -30,6 +27,12 @@ RUN rm -rf ./*
 
 # Copy built files from the previous stage
 COPY --from=build /app/dist ./
+
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+
+# Give execution permissions
+RUN chmod +x /entrypoint.sh
 
 # Expose port 80
 EXPOSE 80
