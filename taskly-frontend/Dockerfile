@@ -1,6 +1,8 @@
 # Use official Node.js image as a base
 FROM node:20-alpine AS build
 
+ENV VITE_API_BASE_URL=http://taskly-backend:5001/
+
 # Set working directory
 WORKDIR /app
 
