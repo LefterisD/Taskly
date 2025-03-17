@@ -88,7 +88,7 @@ function TodoInput() {
     const type = status === 'ok' ? 'success' : 'error';
 
     createSnackbar(message, type, 3000);
-    console.log(createResult);
+
     if (status === 'ok') {
       setTodo({ ...todoTemplate });
       setExpanded(false);
