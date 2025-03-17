@@ -61,9 +61,9 @@ The UI/UX design process was mapped out using Excalidraw. View the detailed wire
 
 - **React + Vite**: Provides a fast and modern development experience.
 - **Material UI**: Ensures a consistent design system with ready-made components.
-- **Framer Motion**: Adds smooth animations for better user experience.
+- **Framer Motion**: Built specificaly for react, quicker to setup and use which was important due to the nature of the project.
 - **TanStack Query**: Optimizes API calls, caching, and state management.
-- **Flask-RESTx**: Streamlines API development with Swagger documentation.
+- **Flask-RESTx**: Flask-rest was abandoned years go, chose the community version which is the restx.
 
 ## API Endpoints
 
