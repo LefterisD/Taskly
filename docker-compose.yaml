@@ -5,12 +5,12 @@ services:
     ports:
       - '5001:5000'
     environment:
-      - FLASK_APP=app # Change 'myapp' to your actual Flask package name
+      - FLASK_APP=app
       - FLASK_RUN_HOST=0.0.0.0
       - FLASK_DEBUG=True
     volumes:
-      - ./taskly-backend:/app # Sync local changes
-      - sqlite_data:/app/instance # Persist SQLite database
+      - ./taskly-backend:/app
+      - sqlite_data:/app/instance
 
   frontend:
     build:
@@ -18,13 +18,13 @@ services:
       args:
         VITE_API_BASE_URL: 'http://localhost:5001/'
     ports:
-      - '3000:80' # Map React frontend to port 3000
+      - '3000:80'
     environment:
-      - VITE_API_BASE_URL=http://localhost:5001/ # Set API URL inside Docker
+      - VITE_API_BASE_URL=http://localhost:5001/
     depends_on:
       - backend
     volumes:
-      - ./taskly-frontend:/app # Ensure .env is written inside the container
+      - ./taskly-frontend:/app
 
 volumes:
   sqlite_data:
