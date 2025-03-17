@@ -41,7 +41,11 @@ Ensure you have the following installed:
    ```sh
    npm run dev
    ```
-4. Open the browser and navigate to:
+4. Run tests:
+   ```sh
+   npm run test
+   ```
+5. Open the browser and navigate to:
    ```sh
    http://localhost:3000
    ```
