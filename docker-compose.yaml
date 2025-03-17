@@ -21,6 +21,8 @@ services:
       - VITE_API_URL=http://taskly-backend:5000/ # Set API URL inside Docker
     depends_on:
       - backend
+    volumes:
+      - ./taskly-frontend:/app # Ensure .env is written inside the container
 
 volumes:
   sqlite_data:

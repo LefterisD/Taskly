@@ -13,6 +13,9 @@ RUN npm install
 # Copy the entire project
 COPY . .
 
+# Generate .env file dynamically
+RUN echo "VITE_API_URL=${VITE_API_URL}" > .env
+
 # Build the React app
 RUN npm run build
 
