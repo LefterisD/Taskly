@@ -140,6 +140,7 @@ function Todo(props: TodoProps) {
           boxShadow: todo.completed ? 0 : 3,
           opacity: todo.completed ? 0.6 : 1,
         }}
+        data-testid="todo-card"
       >
         <Box sx={{ width: '.5rem', background: todo.color }}></Box>
         <Box
