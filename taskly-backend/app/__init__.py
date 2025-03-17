@@ -11,7 +11,7 @@ def create_app():
 
     cors_origins_list = cors_origins.split(",") if cors_origins else []
 
-    CORS(app, resources={r"/*": {"origins": cors_origins_list}})
+    CORS(app, resources={r"/*": {"origins": "*"}})
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite3"
 
     api.init_app(app)
