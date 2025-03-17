@@ -1,7 +1,11 @@
 # Use official Node.js image as a base
 FROM node:20-alpine AS build
 
-ENV VITE_API_BASE_URL=http://taskly-backend:5001/
+# Define build arguments for environment variables
+ARG VITE_API_BASE_URL
+
+# Set environment variables during the build process
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 # Set working directory
 WORKDIR /app
@@ -29,12 +33,6 @@ RUN rm -rf ./*
 
 # Copy built files from the previous stage
 COPY --from=build /app/dist ./
-
-# Copy the entrypoint script
-COPY entrypoint.sh /entrypoint.sh
-
-# Give execution permissions
-RUN chmod +x /entrypoint.sh
 
 # Expose port 80
 EXPOSE 80
