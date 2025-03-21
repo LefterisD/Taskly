@@ -1,9 +1,4 @@
-import {
-  getAllByTestId,
-  getByTestId,
-  render,
-  screen,
-} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { MemoryRouter } from 'react-router';
@@ -28,7 +23,7 @@ describe('About page test', () => {
       </QueryClientProvider>
     );
 
-    const descriptionParagraph: string = screen.getByText(
+    const descriptionParagraph: HTMLElement = screen.getByText(
       /Taskly is a simple yet powerful to-do app designed to help you stay organized and boost productivity/i
     );
 
